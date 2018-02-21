@@ -1,8 +1,5 @@
 package com.claro.moose.controllers;
 
-import com.claro.moose.models.CatalogItem;
-import com.claro.moose.models.Component;
-import com.claro.moose.repository.ComponentRepository;
 import com.claro.moose.repository.PceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,19 +16,11 @@ import java.util.List;
 public class Api {
 
     @Autowired
-    private ComponentRepository componentRepository;
-
-    @Autowired
     private PceRepository pceRepository;
 
-    @RequestMapping("/api/person")
-    public List<Component> person() {
-        return componentRepository.getComponents();
-    }
-
-    @RequestMapping("/api/pce")
-    public List<CatalogItem> pce(@RequestParam("version") long version) {
-        return pceRepository.getPceComponents(version);
+    @RequestMapping("/api/getComponentsFromOms")
+    public List<OmsComponent> getComponentFromOms(@RequestParam("version") long version) {
+        return pceRepository.getComponentsFromOms(version);
     }
 
     @RequestMapping("/api/getCurrentCatalogVersion")
@@ -48,4 +37,6 @@ public class Api {
     public long getCatalogVersion(@RequestParam("version") long version) {
         return pceRepository.getCatalogVersion(version);
     }
+
+
 }
