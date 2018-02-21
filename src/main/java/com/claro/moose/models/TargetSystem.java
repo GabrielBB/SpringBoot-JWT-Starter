@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.claro.moose.pce.domain;
+package com.claro.moose.models;
 
 import java.io.Serializable;
 

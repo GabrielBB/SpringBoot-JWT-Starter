@@ -1,4 +1,4 @@
-package com.claro.moose.pce.domain;
+package com.claro.moose.models;
 
 
 /*

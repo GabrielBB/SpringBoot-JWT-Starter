@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.claro.moose.pce.domain;
+package com.claro.moose.models;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -24,8 +24,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -42,109 +40,26 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ErrorType.findBySendAdmin", query = "SELECT e FROM ErrorType e WHERE e.sendAdmin = :sendAdmin"),
     @NamedQuery(name = "ErrorType.findByEmails", query = "SELECT e FROM ErrorType e WHERE e.emails = :emails")})
 public class ErrorType implements Serializable {
-    private static final long serialVersionUID = 1L;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "ID")
     private BigDecimal id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
     @Column(name = "ERROR")
     private String error;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
     @Column(name = "TYPE")
     private String type;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
     @Column(name = "USER_MESSAGE")
     private String userMessage;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "SEND_ADMIN")
     private boolean sendAdmin;
-    @Size(max = 255)
     @Column(name = "ADMIN_MESSAGE")
     private String adminMessage;
-    @Size(max = 255)
     @Column(name = "EMAILS")
     private String emails;
-
-    public ErrorType() {
-    }
-
-    public ErrorType(BigDecimal id) {
-        this.id = id;
-    }
-
-    public ErrorType(BigDecimal id, String error, String type, String userMessage, boolean sendAdmin) {
-        this.id = id;
-        this.error = error;
-        this.type = type;
-        this.userMessage = userMessage;
-        this.sendAdmin = sendAdmin;
-    }
-
-    public BigDecimal getId() {
-        return id;
-    }
-
-    public void setId(BigDecimal id) {
-        this.id = id;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getUserMessage() {
-        return userMessage;
-    }
-
-    public void setUserMessage(String userMessage) {
-        this.userMessage = userMessage;
-    }
-
-    public boolean getSendAdmin() {
-        return sendAdmin;
-    }
-
-    public void setSendAdmin(boolean sendAdmin) {
-        this.sendAdmin = sendAdmin;
-    }
-
-    public String getAdminMessage() {
-        return adminMessage;
-    }
-
-    public void setAdminMessage(String adminMessage) {
-        this.adminMessage = adminMessage;
-    }
-
-    public String getEmails() {
-        return emails;
-    }
-
-    public void setEmails(String emails) {
-        this.emails = emails;
-    }
 
     @Override
     public int hashCode() {
@@ -168,7 +83,7 @@ public class ErrorType implements Serializable {
 
     @Override
     public String toString() {
-        return "com.claro.moose.pce.domain.ErrorType[ id=" + id + " ]";
+        return "com.claro.moose.models.ErrorType[ id=" + id + " ]";
     }
     
 }

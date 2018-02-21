@@ -1,4 +1,4 @@
-package com.claro.moose.pce.domain;
+package com.claro.moose.models;
 
 import java.io.Serializable;
 
@@ -27,7 +27,7 @@ import javax.persistence.TableGenerator;
 		"  and m.mappingversion = (select max(q.mappingversion) from adsliptvmapping q where (m.component_id || m.iptvtype_id || m.banwitdth_id) = (q.component_id || q.iptvtype_id || q.banwitdth_id)) " +
 		"  ", resultSetMapping="AIMappingsSet")
 @SqlResultSetMapping(name="AIMappingsSet", entities={
-@EntityResult(entityClass= com.claro.moose.pce.domain.ADSLIPTVMapping.class, fields = {
+@EntityResult(entityClass= com.claro.moose.models.ADSLIPTVMapping.class, fields = {
 @FieldResult(name="id", column="id"),
 @FieldResult(name="component", column="component_id"),
 @FieldResult(name="banwitdth", column="banwitdth_id"),

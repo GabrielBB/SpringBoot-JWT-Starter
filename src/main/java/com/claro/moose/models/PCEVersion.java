@@ -1,41 +1,21 @@
-package com.claro.moose.pce.domain;
+package com.claro.moose.models;
 
-import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "PCEVERSION")
-@NamedQueries({
-    @NamedQuery(name = "PCEVersion.lastVersion", query = "SELECT max(c.id) FROM PCEVersion c"),
-    @NamedQuery(name = "PCEVersion.getVersion", query = "Select o From PCEVersion o Where o.id = :pceVersion"),
-    @NamedQuery(name = "PCEVersion.getVersions", query = "SELECT o FROM PCEVersion o")
-})
-public class PCEVersion implements Serializable {
+@Table(name = "PCEVERSION", schema = "MOOSE")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class PCEVersion {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = -3626452621580143890L;
     @Id
     @Column(name="ID")
     private Long id;
-
-    public PCEVersion() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -46,9 +26,8 @@ public class PCEVersion implements Serializable {
             return false;
         }
         final PCEVersion other = (PCEVersion) obj;
-        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
+        if (this.id != other.id && (this.id == null || !this.id.equals(other.id)))
             return false;
-        }
         return true;
     }
 
@@ -57,12 +36,6 @@ public class PCEVersion implements Serializable {
         int hash = 7;
         hash = 83 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
-    }
-
-
-
-    public PCEVersion(Long id) {
-        this.id = id;
     }
 
     @Override

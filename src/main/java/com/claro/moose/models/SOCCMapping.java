@@ -1,4 +1,4 @@
-package com.claro.moose.pce.domain;
+package com.claro.moose.models;
 
 import java.io.Serializable;
 import java.util.List;
@@ -29,7 +29,7 @@ import org.hibernate.annotations.FetchMode;
 })
 @NamedNativeQuery(name="SOCCMapping.getAllMaxVersion", query="Select * from soccmapping s where s.component_id in (select distinct c.component_id from soccmapping c) and s.mappingversion = (select max(y.mappingversion) from soccmapping y where y.component_id = s.component_id)", resultSetMapping="SOCCMappingsSet")
 @SqlResultSetMapping(name="SOCCMappingsSet", entities={
-@EntityResult(entityClass= com.claro.moose.pce.domain.SOCCMapping.class, fields = {
+@EntityResult(entityClass= com.claro.moose.models.SOCCMapping.class, fields = {
 @FieldResult(name="id", column="id"),
 @FieldResult(name="component", column="component_id"),
 @FieldResult(name="pceVersion", column="pceVersion_id"),

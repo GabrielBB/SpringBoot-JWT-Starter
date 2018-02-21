@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.claro.moose.pce.domain;
+package com.claro.moose.models;
 
 import java.io.Serializable;
 import java.util.List;
@@ -47,7 +47,7 @@ import javax.persistence.TableGenerator;
         + " UNION ALL select * from mapping m where m.component_id in (select distinct c.component_id from mapping c where c.componentpath is null)"
         + "  and m.mappingversion = (select max(q.mappingversion) from mapping q where q.component_id = m.component_id)", resultSetMapping = "MappingsSet")
 @SqlResultSetMapping(name = "MappingsSet", entities = {
-    @EntityResult(entityClass = com.claro.moose.pce.domain.Mapping.class, fields = {
+    @EntityResult(entityClass = com.claro.moose.models.Mapping.class, fields = {
         @FieldResult(name = "id", column = "id"),
         @FieldResult(name = "component", column = "component_id"),
         @FieldResult(name = "gsec", column = "gsec_id"),

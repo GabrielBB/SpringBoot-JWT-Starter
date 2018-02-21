@@ -3,7 +3,11 @@
  * and open the template in the editor.
  */
 
-package com.claro.moose.pce.domain;
+package com.claro.moose.models;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 
@@ -21,6 +25,9 @@ import javax.persistence.TableGenerator;
  * @author Nestor Alduey
  */
 @Entity
+@NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "ENTRY")
 public class Entry implements Serializable {
 
@@ -34,49 +41,10 @@ public class Entry implements Serializable {
     
     private String value;
     
-    private String decodedvalue;
+    private String decodedValue;
     
     @ManyToOne        
     private Domain domain;
-
-	public Domain getDomain() {
-		return domain;
-	}
-
-	public void setDomain(Domain domain) {
-		this.domain = domain;
-	}
-
-	public Entry() {
-    }
-
-    public Entry(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public String getDecodedvalue() {
-        return decodedvalue;
-    }
-
-    public void setDecodedvalue(String decodedvalue) {
-        this.decodedvalue = decodedvalue;
-    }
 
     @Override
     public int hashCode() {
@@ -100,7 +68,7 @@ public class Entry implements Serializable {
 
     @Override
     public String toString() {
-        return decodedvalue;
+        return decodedValue;
     }
 
 }

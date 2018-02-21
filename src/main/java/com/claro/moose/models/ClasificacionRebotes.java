@@ -1,7 +1,6 @@
-package com.claro.moose.pce.domain;
+package com.claro.moose.models;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -19,46 +18,11 @@ public class ClasificacionRebotes implements Serializable {
     @Column(name = "ID")
     private BigDecimal id;
     @Column(name = "MENSAJE_ERROR")
-    @NotNull
     private String mensajeError;
-    @NotNull
     @Column(name = "TIPO_ERROR")
     private String tipoerror;
-
     @Transient
     private int total;
-
-    public BigDecimal getId() {
-        return id;
-    }
-
-    public void setId(BigDecimal id) {
-        this.id = id;
-    }
-
-    public String getMensajeError() {
-        return mensajeError;
-    }
-
-    public void setMensajeError(String mensajeError) {
-        this.mensajeError = mensajeError;
-    }
-
-    public String getTipoError() {
-        return tipoerror;
-    }
-
-    public void setTipoError(String tipoError) {
-        this.tipoerror = tipoError;
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
-    }
 
     @Override
     public int hashCode() {
