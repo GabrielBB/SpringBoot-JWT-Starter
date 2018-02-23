@@ -21,3 +21,7 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+### Visual Studio Code ###
+.vscode/
+.sts4-cache/
