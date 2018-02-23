@@ -4,6 +4,7 @@ import com.claro.moose.models.Component;
 import com.claro.moose.models.PCEVersion;
 import com.claro.moose.repositories.ComponentRepository;
 import com.claro.moose.repositories.PCEVersionRepository;
+import com.claro.moose.util.extractor.CatalogExtractor;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,6 +27,9 @@ public class ExtractorTests {
     @Autowired
     PCEVersionRepository pceRepository;
 
+    @Autowired
+    CatalogExtractor extractor;
+
     @Test
     public void findLastPceVersion() {
         PCEVersion v = pceRepository.findFirstByOrderByIdDesc();
@@ -35,5 +39,11 @@ public class ExtractorTests {
     public void findComponentByCatalogId() {
         Component c = componentRepository.findOne(4030829L);
         Assert.assertEquals(c.getCompCode(), "MARCADO_ABREVIADO");
+    }
+
+    @Test
+    public void extract() {
+        extractor.extract(20190101L);
+        Assert.assertTrue(true);
     }
 }

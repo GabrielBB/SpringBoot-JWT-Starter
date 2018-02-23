@@ -5,10 +5,7 @@
 
 package com.claro.moose.models;
 
-import java.util.List;
 import javax.persistence.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -65,16 +62,6 @@ public class Attribute {
 	@OneToOne
 	@JoinColumn(name = "domain_id")
 	private Domain domain;
-
-	@ManyToMany(cascade = CascadeType.ALL)
-	@Fetch(FetchMode.SUBSELECT)
-	@JoinColumn(nullable = true)
-	private List<Entry> oldEntries;
-
-	public List<Entry> getAllEntries() {
-		domain.getEntry().addAll(oldEntries);
-		return domain.getEntry();
-	}
 
 	@Override
 	public int hashCode() {

@@ -3,9 +3,10 @@ package com.claro.moose.util.extractor;
 import com.claro.moose.models.*;
 import com.claro.moose.repositories.*;
 
-import java.sql.SQLException;
 import java.util.*;
+
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,34 +28,16 @@ public class CatalogExtractor {
     @Autowired
     private AttributeDomainRepository attributeDomainRepo;
 
-    private Logger log;
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     private PCEVersion getMooseCatalogVersion(long versionId) {
         PCEVersion pceVersion = pceVersionRepo.findOne(versionId);
 
         if (pceVersion == null) {
             pceVersion = new PCEVersion(versionId);
-            pceVersionRepo.save(pceVersion);
         }
 
         return pceVersion;
-    }
-
-    private Component mapPCEComponent(Map<String, Object> pceResult, PCEVersion version) {
-        Component c = new Component();
-        c.setCatalogId((Long) pceResult.get("CHILD_ID"));
-        c.setCompCode((String) pceResult.get("CAPTION"));
-        c.setName((String) pceResult.get("NAME_TEXT"));
-        c.setPceVersion(version);
-        c.setServiceType((String) pceResult.get("SERVICETYPE"));
-        c.setItemType((String) pceResult.get("ITEM_TYPE"));
-
-        log.info("*****************************************");
-        log.info(" Catalog ID: " + c.getCatalogId());
-        log.info(" Component CODE: " + c.getCompCode());
-        log.info("*****************************************");
-
-        return c;
     }
 
     public void extract(long version) {
@@ -62,103 +45,41 @@ public class CatalogExtractor {
 
         int total = pce.getPCEComponentVersionTotal(version);
 
-        log.info("Total de componentes: " + total);
-        PCEVersion mooseVersion = pceVersionRepo.findFirstByOrderByIdDesc();
-        log.info("La version de Catalogo en MOOSE es: " + mooseVersion.getId());
+        PCEVersion pceVersion = getMooseCatalogVersion(version); // If it doesn't exists, it is created and returned
 
-        List<Map<String, Object>> pceComps = pce.getPCEComponentsByVersion(version);
-        PCEVersion versionObj = getMooseCatalogVersion(version);
+        List<Component> pceComponents = pce.getPCEComponentsByVersion(pceVersion);
 
-        for (Map<String, Object> pceComp : pceComps) {
-            log.info("Componentes procesados:" + (++progreso + "/" + total));
+        for (Component pceComponent : pceComponents) {
+          log.info("Componentes procesados:" + (++progreso + "/" + total));
 
-            Component comp = mapPCEComponent(pceComp, versionObj);
+          // In the meantime... in the future we should delete the ID column from the Component Table and set the CATALOG_ID column as the Primary Key, so we don't have to make this search
+          Component mooseComponent = componentRepo.findByCatalogId(pceComponent.getCatalogId());
+          pceComponent.setId(mooseComponent == null ? null : mooseComponent.getId());
+        
 
-            List<Map<String, Object>> componentAttributes = pce.getComponentAttributes(comp.getCatalogId(),
-                    versionObj.getId());
+          componentRepo.save(pceComponent);
 
-            try {
-                for (Map<String, Object> atributoDominio : componentAttributes) {
-                    String domainName = (String) atributoDominio.get("DOMAIN_NAME");
-                    Domain domain =  createDomain(domainName);
+            List<AttributeDomain> attributeDomains = pce.getComponentAttributes(pceComponent);
 
-                    Attribute attr = attributeRepo.findByPropertyId((int) atributoDominio.get("PROPERTY_ID"));
-                    if (attr == null) {
-                        String propertyName = (String) atributoDominio.get("PROPERTY_NAME");
-                        String name = (String) atributoDominio.get("NAME_TEXT");
-                        int propertyId = (int) atributoDominio.get("PROPERTY_ID");
+            for(AttributeDomain attributeDomain : attributeDomains) {
+               Domain domain = attributeDomain.getDomain();
 
-                        attr = createAttribute(name, propertyName, propertyId, versionObj);
-                    }
+               domainRepo.save(domain);
 
-                    AttributeDomain attrDomain = new AttributeDomain();
-                    attrDomain.setAttribute(attr);
-                    attrDomain.setDomain(domain);
-                    attrDomain.setComponent(comp);
+               List<Entry> entries = domain.getEntry();
 
-                    attributeDomainRepo.save(attrDomain);
-                    comp.getListAttrsDomains().add(attrDomain);
-                }
+               for(Entry entry : entries) {
+                   entryRepo.save(entry);
+               }
 
-            } catch (Exception e) {
-                log.error("Exception: ", e);
+               Attribute attribute = attributeDomain.getAttribute();
+               attributeRepo.save(attribute);
+
+               attributeDomainRepo.save(attributeDomain);
             }
 
-            componentRepo.save(comp);
+            /*// Let's add that as a component child
+            pceComponent.setListAttrsDomains(new HashSet<AttributeDomain>(attributeDomains));*/
         }
-
-     /*   Map<Long, Component> g = new HashMap();
-        Map<String, String> par = new HashMap();
-
-        par.put("itemType", "CO");
-        @SuppressWarnings("unchecked")
-        List<Component> comps = controller.makeQuery("Component.findAll", par);
-        for (Component c : comps) {
-            g.put(c.getCatalogId(), c);
-        }*/
-
-        /*  for (Long aLong : newComponents.keySet()) {
-            Component comp = newComponents.get(aLong);
-            List<Component> parents = getParents(comp.getCatalogId(), g);
-            comp.setParentComponent(parents);
-            controller.merge(comp);
-            log.info("PROGRESO:" + progreso);
-        }*/
-    }
-
-    private Attribute createAttribute(String name, String propertyName, int propertyID, PCEVersion pceVersion) {
-        Attribute attribute = new Attribute();
-        attribute.setName(name);
-        attribute.setPceVersion(pceVersion);
-        attribute.setPropertyid(propertyID);
-        attribute.setPropertyname(propertyName);
-
-        attributeRepo.save(attribute);
-
-        return attribute;
-    }
-
-    private Domain createDomain(String name) throws SQLException {
-
-        Domain domain = new Domain();
-        domain.setName(name);
-        domain.setEntry(new ArrayList<Entry>());
-
-        List<Map<String, Object>> entries = pce.getDomainEntries(name);
-
-        for (Map<String, Object> entry : entries) {
-            Entry e = new Entry();
-            e.setDomain(domain);
-            e.setDecodedValue((String) entry.get("CAPTION_EN"));
-            e.setValue((String) entry.get("DISCRETE_CODE"));
-
-            entryRepo.save(e);
-
-            domain.getEntry().add(e);
-        }
-
-        domainRepo.save(domain);
-
-        return domain;
     }
 }

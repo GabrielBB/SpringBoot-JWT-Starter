@@ -4,16 +4,12 @@
  */
 package com.claro.moose.models;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "COMPONENT", schema = "MOOSE")
@@ -44,18 +40,10 @@ public class Component {
     @Column(name = "servicetype")
     private String serviceType;
 
-    @ManyToMany
-    @JoinColumn(nullable = true)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<Component> parentComponent;
-
-    @Transient
-    private List<Component> childComponents;
-
-    @OneToMany(mappedBy = "component", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "component", fetch = FetchType.LAZY)
     private Set<AttributeDomain> listAttrsDomains;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "pceversion_id")
     private PCEVersion pceVersion;
 
@@ -86,14 +74,5 @@ public class Component {
     @Override
     public String toString() {
         return name;
-    }
-
-    public void setListAttrsDomains(Set<AttributeDomain> listAttrsDomains) {
-        this.listAttrsDomains = listAttrsDomains;
-    }
-
-    public Set<AttributeDomain> getListAttrsDomains() {
-        if (listAttrsDomains == null) listAttrsDomains = new HashSet<AttributeDomain>();
-        return listAttrsDomains;
     }
 }
