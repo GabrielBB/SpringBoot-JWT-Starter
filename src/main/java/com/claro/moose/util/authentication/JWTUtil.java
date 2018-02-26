@@ -12,8 +12,6 @@ import io.jsonwebtoken.CompressionCodecs;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -26,12 +24,16 @@ import java.util.concurrent.TimeUnit;
 public class JWTUtil {
 
     @Value("${jwt.signature-key}")
-    private String signatureKey;
+    private final String signatureKey = "Claro01";
 
     @Value("${jwt.expiration-hours}")
-    private int expirationTimeInHours;
+    private final int expirationTimeInHours = 1;
 
     private byte[] signatureKeyBytes;
+
+    public JWTUtil() {
+        init();
+    }
 
     @PostConstruct
     protected void init() { signatureKeyBytes = signatureKey.getBytes(); }

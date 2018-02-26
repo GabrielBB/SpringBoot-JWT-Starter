@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
@@ -22,7 +21,7 @@ public class AuthController {
     @Autowired
     private JWTUtil jwtUtil;
 
-    @RequestMapping("/login")
+    @RequestMapping("/api/login")
     public ResponseEntity<String> login(@RequestParam(name = "usr") String username,
             @RequestParam(name = "token") long token) {
 
@@ -38,10 +37,5 @@ public class AuthController {
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-    }
-
-    @RequestMapping("/decodetoken")
-    public User decodeToken(@RequestParam(name = "token") String token) {
-        return jwtUtil.getUser(token);
     }
 }

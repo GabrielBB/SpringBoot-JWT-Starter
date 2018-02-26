@@ -7,4 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/extraccion")
 public class ExtractionController {
 
+    @RequestMapping("")
+    public String hello() {
+        return "Hello";
+    }
 }
