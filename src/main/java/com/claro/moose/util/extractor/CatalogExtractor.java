@@ -28,7 +28,7 @@ public class CatalogExtractor {
     @Autowired
     private AttributeDomainRepository attributeDomainRepo;
 
-    private Logger log = LoggerFactory.getLogger(this.getClass());
+    private static final Logger log = LoggerFactory.getLogger(CatalogExtractor.class);
 
     private PCEVersion getMooseCatalogVersion(long versionId) {
         PCEVersion pceVersion = pceVersionRepo.findOne(versionId);

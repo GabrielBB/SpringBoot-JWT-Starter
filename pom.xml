@@ -66,14 +66,56 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+         <dependency>
+               <groupId>org.springframework.ws</groupId>
+               <artifactId>spring-ws-core</artifactId>
+        </dependency>
+        
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+    <version>1.5.10.RELEASE</version>
+</dependency>
+
+
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt</artifactId>
+    <version>0.9.0</version>
+</dependency>
+
+
     </dependencies>
 
     <build>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+             <plugin>
+    <groupId>org.jvnet.jaxb2.maven2</groupId>
+    <artifactId>maven-jaxb2-plugin</artifactId>
+    <version>0.13.3</version>
+    <executions>
+        <execution>
+            <goals>
+                <goal>generate</goal>
+            </goals>
+        </execution>
+    </executions>
+    <configuration>
+        <schemaLanguage>WSDL</schemaLanguage>
+        <generatePackage>com.claro.moose.ws.authentication</generatePackage>
+        <schemas>
+            <schema>
+                <url>http://portalweb/wsuserportal/wsuserportal.asmx?WSDL</url>
+            </schema>
+        </schemas>
+    </configuration>
+</plugin>
         </plugins>
     </build>
 

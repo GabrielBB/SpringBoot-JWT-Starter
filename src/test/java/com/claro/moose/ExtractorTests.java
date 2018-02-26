@@ -13,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-/**
- * Created by Alenkart Rodriguez on 2/19/2018.
- */
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,17 +30,18 @@ public class ExtractorTests {
     @Test
     public void findLastPceVersion() {
         PCEVersion v = pceRepository.findFirstByOrderByIdDesc();
-        Assert.assertEquals(v.getId().longValue(), 20180703L);
+        Assert.assertEquals(v.getId().longValue(), 20190101L);
     }
     @Test
     public void findComponentByCatalogId() {
         Component c = componentRepository.findOne(4030829L);
         Assert.assertEquals(c.getCompCode(), "MARCADO_ABREVIADO");
     }
-
+/*
     @Test
     public void extract() {
         extractor.extract(20190101L);
         Assert.assertTrue(true);
     }
+    */
 }
