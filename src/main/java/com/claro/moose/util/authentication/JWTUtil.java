@@ -1,7 +1,7 @@
 package com.claro.moose.util.authentication;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
@@ -12,6 +12,7 @@ import io.jsonwebtoken.CompressionCodecs;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -20,29 +21,27 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Gabriel Basilio Brito on 2/25/2018.
  */
-@Service
+@Component
 public class JWTUtil {
 
     @Value("${jwt.signature-key}")
-    private final String signatureKey = "Claro01";
+    private String signatureKey;
 
     @Value("${jwt.expiration-hours}")
-    private final int expirationTimeInHours = 1;
+    private int expirationTimeInHours;
 
     private byte[] signatureKeyBytes;
 
-    public JWTUtil() {
-        init();
-    }
-
     @PostConstruct
-    protected void init() { signatureKeyBytes = signatureKey.getBytes(); }
+    protected void init() {
+        signatureKeyBytes = signatureKey.getBytes();
+    }
 
     public String getToken(User user) {
         return Jwts.builder()
                 .setSubject(user.getName())
                 .signWith(SignatureAlgorithm.HS512, signatureKeyBytes)
-                .compressWith(CompressionCodecs.DEFLATE)
+              //  .compressWith(CompressionCodecs.DEFLATE)
                 .claim("role", user.getRole().getDescription())
                 .claim("menu", user.getRole().getPermissions())
                 .setIssuedAt(new Date())
@@ -57,7 +56,7 @@ public class JWTUtil {
 
         Role role = new Role();
         role.setDescription(claims.get("role").toString());
-        List<String> menus = (List<String>) claims.get("menu");
+        List<String> menus = (List) claims.get("menu");
         role.setPermissions(menus);
         user.setRole(role);
         return user;

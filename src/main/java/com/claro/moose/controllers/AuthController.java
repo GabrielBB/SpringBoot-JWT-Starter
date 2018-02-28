@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,21 +22,26 @@ public class AuthController {
     @Autowired
     private JWTUtil jwtUtil;
 
-    @RequestMapping("/api/login")
-    public ResponseEntity<String> login(@RequestParam(name = "usr") String username,
-            @RequestParam(name = "token") long token) {
+    @RequestMapping(value = "/api/login", method = RequestMethod.POST)
+    public ResponseEntity<String> login(@RequestParam(name = "user") String username,
+     @RequestParam(name = "token") long token) {
 
-        if (pawClient.isValidToken(username, token)) {
-            User user = new User();
-            user.setName(username);
+                if (pawClient.isValidToken(username, token)) {
+                    User user = new User();
+                    user.setName(username);
 
-            Role role = pawClient.getRoleByUsername(user.getName());
-            user.setRole(role);
-            
-            String jwt = jwtUtil.getToken(user);
+                    Role role = pawClient.getRoleByUsername(user.getName());
+                    user.setRole(role);
+
+                    String jwt = jwtUtil.getToken(user);
             return ResponseEntity.ok(jwt);
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+    }
+
+    @RequestMapping("/api/decodetoken")
+    public User decodeToken(@RequestParam String token) {
+        return jwtUtil.getUser(token);
     }
 }

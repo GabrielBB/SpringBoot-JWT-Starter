@@ -26,14 +26,13 @@ import org.springframework.stereotype.Component;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
-    @Value("${jwt.header-string}")
-    private final String jwtHeaderName = "x-auth";
+    private final JWTUtil jwtUtil;
+    private final String jwtHeaderName;
 
-    @Autowired
-    private JWTUtil jwtUtil = new JWTUtil();
-
-    public JWTAuthorizationFilter(AuthenticationManager authManager) {
+    public JWTAuthorizationFilter(AuthenticationManager authManager, JWTUtil jwtUtil, String jwtHeaderName) {
         super(authManager);
+        this.jwtUtil = jwtUtil;
+        this.jwtHeaderName = jwtHeaderName;
     }
 
     @Override
@@ -46,8 +45,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             User user = jwtUtil.getUser(token);
 
             if (user != null) {
+               List<GrantedAuthority> authorities = getUserAuthorities(user.getRole());
+
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        user.getName(), null, getUserAuthorities(user.getRole()));
+                        user.getName(), null, authorities);
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
@@ -59,7 +60,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private List<GrantedAuthority> getUserAuthorities(Role role) {
 
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        List<GrantedAuthority> authorities = new ArrayList();
 
         // Build user's authorities
         for (String permission : role.getPermissions()) {
