@@ -8,14 +8,10 @@ import com.claro.moose.util.authentication.PAWClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AuthController {
-
     @Autowired
     private PAWClient pawClient;
 
@@ -23,17 +19,19 @@ public class AuthController {
     private JWTUtil jwtUtil;
 
     @RequestMapping(value = "/api/login", method = RequestMethod.POST)
-    public ResponseEntity<String> login(@RequestParam(name = "user") String username,
-     @RequestParam(name = "token") long token) {
+    public ResponseEntity<String> login(@RequestParam("user") String user, @RequestParam("token") long token) {
 
-                if (pawClient.isValidToken(username, token)) {
-                    User user = new User();
-                    user.setName(username);
+        //  String username = request.getParameter("user");
+        //   long token = Long.parseLong(request.getParameter("token"));
 
-                    Role role = pawClient.getRoleByUsername(user.getName());
-                    user.setRole(role);
+        if (pawClient.isValidToken(user, token)) {
+            User userObject = new User();
+            userObject.setName(user);
 
-                    String jwt = jwtUtil.getToken(user);
+            Role role = pawClient.getRoleByUsername(userObject.getName());
+            userObject.setRole(role);
+
+            String jwt = jwtUtil.getToken(userObject);
             return ResponseEntity.ok(jwt);
         }
 

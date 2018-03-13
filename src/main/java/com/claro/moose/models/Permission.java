@@ -1,6 +1,5 @@
 package com.claro.moose.models;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role {
+public class Permission {
 
-    private int id;
+    private String name;
     private String description;
-    private List<Permission> permissions;
+
 }

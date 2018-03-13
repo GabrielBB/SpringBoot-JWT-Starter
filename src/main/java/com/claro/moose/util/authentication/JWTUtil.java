@@ -5,14 +5,13 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
+import com.claro.moose.models.Permission;
 import com.claro.moose.models.Role;
 import com.claro.moose.models.User;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.CompressionCodecs;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -43,7 +42,7 @@ public class JWTUtil {
                 .signWith(SignatureAlgorithm.HS512, signatureKeyBytes)
               //  .compressWith(CompressionCodecs.DEFLATE)
                 .claim("role", user.getRole().getDescription())
-                .claim("menu", user.getRole().getPermissions())
+                .claim("permissions", user.getRole().getPermissions())
                 .setIssuedAt(new Date())
                 .setExpiration(getExpirationTime())
                 .compact();
@@ -56,7 +55,7 @@ public class JWTUtil {
 
         Role role = new Role();
         role.setDescription(claims.get("role").toString());
-        List<String> menus = (List) claims.get("menu");
+        List<Permission> menus = (List<Permission>) claims.get("permissions");
         role.setPermissions(menus);
         user.setRole(role);
         return user;

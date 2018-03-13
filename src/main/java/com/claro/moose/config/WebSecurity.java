@@ -27,8 +27,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers("/api/login").permitAll()
-                .antMatchers("/api/extraccion").hasAuthority("Extraccion")
-                .antMatchers("/api/mapping").hasAuthority("Mappings")
+                .antMatchers("/api/extraccion").hasAuthority("extraction")
+                .antMatchers("/api/mapping").hasAuthority("mapping")
                 .and()
                 .addFilter(getAuthorizationFilter())
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
