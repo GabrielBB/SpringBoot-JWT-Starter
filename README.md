@@ -119,7 +119,7 @@ Now we have to tell Spring who is this guy and what role he has but Spring doesn
 
 In the configuration class **com.github.gabrielbb.config.WebSecurity** we are specifying which routes are open to the world, such as the login, and which routes are protected and the roles that are permitted to request them.
 
-```java
+```javascript
 http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/*").hasAuthority("MASTER_ADMIN")
