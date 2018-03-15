@@ -25,9 +25,7 @@ public class AuthController {
         if ((user = userRepo.findByNameAndPassword(name, password)) != null) {
             String jsonWebToken = jwtUtil.getToken(user);
 
-            if (jsonWebToken != null) {
-                return ResponseEntity.ok(jsonWebToken);
-            }
+            return ResponseEntity.status(HttpStatus.OK).body(jsonWebToken);
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);

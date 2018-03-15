@@ -23,9 +23,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/*").hasRole("MASTER_ADMIN")
-                .antMatchers("/cats").hasRole("CAT_ADMIN")
-                .antMatchers("/dogs").hasRole("DOG_ADMIN")
+                .antMatchers("/*").hasAuthority("MASTER_ADMIN")
+                .antMatchers("/cats").hasAuthority("CAT_ADMIN")
+                .antMatchers("/dogs").hasAuthority("DOG_ADMIN")
                 .and()
                 .addFilter(getAuthorizationFilter())
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

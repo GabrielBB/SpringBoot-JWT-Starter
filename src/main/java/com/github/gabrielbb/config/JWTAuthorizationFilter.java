@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,10 +39,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             try {
                 User user = jwtUtil.getUser(token);
 
-                GrantedAuthority[] authorities = { new SimpleGrantedAuthority("ROLE_" + user.getRole().toString()) };
+                GrantedAuthority roleAuthority = new SimpleGrantedAuthority(user.getRole());
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        user.getId(), null, Arrays.asList(authorities));
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                        user.getId(), null, Arrays.asList(roleAuthority));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (SignatureException ex) {

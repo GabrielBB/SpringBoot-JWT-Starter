@@ -47,7 +47,7 @@ public class AuthenticationTests {
         ResponseEntity<String> response = login("bigboss", "123");
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", response.getBody());
+        headers.set("Authorization", response.getBody()); // Setting JSON Web Token to Request Header
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
         HttpStatus catStatus = restTemplate.exchange("/cats", HttpMethod.GET, entity, String.class).getStatusCode();
