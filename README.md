@@ -189,13 +189,5 @@ public class AuthenticationTests {
         assertEquals(catStatus, HttpStatus.OK);
         assertEquals(dogStatus, HttpStatus.OK);
     }
-
-    private ResponseEntity<String> login(String user, String password) {
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-        map.add("name", user);
-        map.add("password", password);
-        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, null);
-        return restTemplate.exchange("/login", HttpMethod.POST, entity, String.class);
-    }
 }
 ```
