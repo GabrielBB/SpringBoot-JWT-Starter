@@ -37,7 +37,8 @@ Using [Spring Data JPA](https://spring.io/guides/gs/accessing-data-jpa/) to crea
 To generate a JSON Web Token based on the entity and convert it back to a [POJO](https://en.wikipedia.org/wiki/Plain_old_Java_object), this project is using this utility class i made: [JWTUtility](https://github.com/GabrielBB/jwt-java-utility), it's just an implementation of the library [JJWT](https://github.com/jwtk/jjwt). 
 
 ## Authentication Controller
-We have an authentication controller with a single "/login" method that accepts POST requests. Here we are importing the [JWTUtility](https://github.com/GabrielBB/jwt-java-utility) and the UserRepository. The logic here is self explanatory: Check if there is a user registered with that username and password, take the returned entity from the database and generate a token from it. If this is successfully done it returns the HTTP code: [200](https://httpstatuses.com/200) and the token in the response body, otherwise it returns the code [401](https://httpstatuses.com/401).
+
+We have an authentication controller with a single "/login" method that accepts POST requests. Here we are using the [JWTUtility](https://github.com/GabrielBB/SpringBoot-JWT-Starter/blob/master/src/main/java/com/github/gabrielbb/util/JWTUtility.java) and the UserRepository. The logic here is self explanatory: Check if there is a user registered with that username and password, take the returned entity from the database and generate a token from it. If this is successfully done it returns the HTTP code: [200](https://httpstatuses.com/200) and the token in the response body, otherwise it returns the code [401](https://httpstatuses.com/401).
 
 ```java
 package com.github.gabrielbb.controllers;
