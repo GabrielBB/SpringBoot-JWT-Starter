@@ -1,6 +1,6 @@
 # SpringBoot-JWT-Starter
 
-Easily editable Spring Boot REST Backend with JSON Web Token Authentication and Authorization
+Spring Boot starter project with JSON Web Token Authentication and Authorization enabled
 
 ## The User Entity
 
