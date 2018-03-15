@@ -21,7 +21,7 @@ import com.github.gabrielbb.util.JWTUtility;
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final JWTUtility jwtUtil;
-    private static final String JWT_HEADER_NAME = "x-auth";
+    private static final String JWT_HEADER_NAME = "Authorization";
 
     public JWTAuthorizationFilter(AuthenticationManager authManager, JWTUtility jwtUtil) {
         super(authManager);

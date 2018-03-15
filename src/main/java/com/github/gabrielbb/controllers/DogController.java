@@ -9,6 +9,6 @@ public class DogController {
 
     @RequestMapping("")
     public String index() {
-        return "HAW HAW!";
+        return "HAW";
     }
 }

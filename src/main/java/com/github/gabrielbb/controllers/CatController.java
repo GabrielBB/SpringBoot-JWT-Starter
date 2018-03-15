@@ -9,6 +9,6 @@ public class CatController {
 
     @RequestMapping("")
     public String index() {
-        return "MEOOOW";
+        return "MEOW";
     }
 }

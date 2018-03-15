@@ -20,13 +20,16 @@ public class AuthController {
 
     @PostMapping(value = "/login")
     public ResponseEntity<String> login(String name, String password) {
-        
+
         final User user;
         if ((user = userRepo.findByNameAndPassword(name, password)) != null) {
             String jsonWebToken = jwtUtil.getToken(user);
-            return ResponseEntity.ok(jsonWebToken);
+
+            if (jsonWebToken != null) {
+                return ResponseEntity.ok(jsonWebToken);
+            }
         }
 
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 }

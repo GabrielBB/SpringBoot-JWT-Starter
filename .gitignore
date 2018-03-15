@@ -23,6 +23,7 @@ nbdist/
 ### Visual Studio Code ###
 .vscode/
 .sts4-cache/
+.settings/
 
 ## Application files ##
 target/
