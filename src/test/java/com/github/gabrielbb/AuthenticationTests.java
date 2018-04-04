@@ -20,6 +20,7 @@ public class AuthenticationTests {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    // Make sure every path is secured and throws a "FORBIDDEN" code, except the login, which should be open and return an "UNAUTHORIZED" code when login was not successful.
     @Test
     public void testControllersWithNoAuth() {
         HttpStatus catStatus = restTemplate.exchange("/cats", HttpMethod.GET, null, String.class).getStatusCode();
@@ -30,18 +31,21 @@ public class AuthenticationTests {
         assertEquals(loginStatus, HttpStatus.UNAUTHORIZED);
     }
 
+    // Test a successful login, which should return a 200 status code
     @Test
     public void testSuccessfulLogin() {
         ResponseEntity<String> response = login("SnoopDogg", "123");
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
+    // Test a failed login, which should return a 401 status code
     @Test
     public void testFailedLogin() {
         ResponseEntity<String> response = login("SnoopDogg", "Random Password");
         assertEquals(response.getStatusCode(), HttpStatus.UNAUTHORIZED);
     }
 
+    // Test path access after a sucessful login. They should return a 200 status code now, instead of 403 like in the first test
     @Test
     public void testControllersAfterAuth() {
         ResponseEntity<String> response = login("bigboss", "123");
